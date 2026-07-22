@@ -107,6 +107,13 @@
   .btn-primary{background:var(--coral);color:#2a0f12}.btn-primary:hover{background:var(--coral-deep)}
   .btn-ghost{border:1px solid var(--line);color:var(--txt)}.btn-ghost:hover{border-color:var(--lav);color:var(--lav)}
   .btn-danger{border:1px solid rgba(232,107,107,.45);color:#E86B6B}.btn-danger:hover{background:rgba(232,107,107,.1)}
+  .cmt-list{margin-top:6px}
+  .cmt-box{display:flex;gap:8px;margin-top:14px}
+  .cmt-box input{flex:1;background:var(--ink-2);border:1px solid var(--line-soft);color:var(--txt);border-radius:11px;padding:10px 14px;font-size:13.5px}
+  .cmt-box input:focus{outline:none;border-color:var(--coral)}
+  .cmt .cx{margin-left:auto;color:var(--muted-2);font-size:11px;cursor:pointer;opacity:0;transition:.15s}
+  .cmt:hover .cx{opacity:1}.cmt .cx:hover{color:#E86B6B}
+  .cmt .cwrap{flex:1;min-width:0}
   .btn svg{width:16px;height:16px;stroke-width:2}
   .seg{display:inline-flex;gap:4px;background:var(--ink-1);border:1px solid var(--line-soft);border-radius:12px;padding:4px;margin-bottom:20px;flex-wrap:wrap}
   .seg button{padding:8px 16px;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--muted);transition:.15s}
@@ -763,7 +770,7 @@ window.setLiveCases=function(arr){CASES.length=0;arr.forEach(c=>CASES.push(c));c
 function composeCase(editId){
   window.__editCaseId = editId||null;
   const c = editId? CASES.find(x=>x.id===editId) : null;
-  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div class="eyebrow">Rounds</div><h3 style="margin-top:8px">'+(c?'증례 수정하기':'증례 올리기')+'</h3><p style="color:var(--muted);font-size:12.5px;margin-top:6px">사진 업로드는 스토리지 연결(다음 업데이트)과 함께 열립니다.</p><div class="flabel">제목</div><input class="finput" id="caseTitle" placeholder="예: Solar lentigo, 1064 toning 후 PIH" /><div class="flabel">주제</div><div id="caseTagPick" class="topics"></div><div class="flabel">증례 설명</div><textarea class="finput" id="caseDesc" style="min-height:90px;resize:vertical;font-family:inherit" placeholder="나이 · 부위 · 경과 등"></textarea><div class="flabel">치료</div><input class="finput" id="caseTx" placeholder="예: 1064 QS toning → TA 후 cooling" /><div class="flabel">세팅</div><input class="finput" id="caseSetting" placeholder="예: Spectra 1064nm · 7mm · 1.6J · 5pass" /><button class="btn btn-primary" style="width:100%;margin-top:18px" onclick="submitCase()">'+(c?'수정하기':'올리기')+'</button></div>';
+  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div class="eyebrow">Rounds</div><h3 style="margin-top:8px">'+(c?'증례 수정하기':'증례 올리기')+'</h3><p style="color:var(--muted);font-size:12.5px;margin-top:6px">증례 사진 업로드는 다음 업데이트에서 열립니다. 지금은 텍스트로 남겨주세요.</p><div class="flabel">제목</div><input class="finput" id="caseTitle" placeholder="예: Solar lentigo, 1064 toning 후 PIH" /><div class="flabel">주제</div><div id="caseTagPick" class="topics"></div><div class="flabel">증례 설명</div><textarea class="finput" id="caseDesc" style="min-height:90px;resize:vertical;font-family:inherit" placeholder="나이 · 부위 · 경과 등"></textarea><div class="flabel">치료</div><input class="finput" id="caseTx" placeholder="예: 1064 QS toning → TA 후 cooling" /><div class="flabel">세팅</div><input class="finput" id="caseSetting" placeholder="예: Spectra 1064nm · 7mm · 1.6J · 5pass" /><button class="btn btn-primary" style="width:100%;margin-top:18px" onclick="submitCase()">'+(c?'수정하기':'올리기')+'</button></div>';
   document.getElementById('caseTagPick').innerHTML=TOPICS.map((t,i)=>'<span class="pill'+((c?t===c.tag:i===0)?' on':'')+'" data-t="'+t+'" onclick="pickNoteTag(this)">'+t+'</span>').join('');
   if(c){document.getElementById('caseTitle').value=c.title;document.getElementById('caseDesc').value=c.desc||'';document.getElementById('caseTx').value=c.tx||'';document.getElementById('caseSetting').value=c.setting||'';}
   showModal();setTimeout(()=>{const el=document.getElementById('caseTitle');if(el)el.focus();},60);
@@ -803,7 +810,7 @@ window.setLiveSessions=function(arr){GATHERINGS.length=0;arr.forEach(g=>GATHERIN
 function composeSession(editId){
   window.__editSessId = editId||null;
   const g = editId? GATHERINGS.find(x=>x.id===editId) : null;
-  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div class="eyebrow">Sessions</div><h3 style="margin-top:8px">'+(g?'모임 기록 수정':'모임 기록 추가')+'</h3><p style="color:var(--muted);font-size:12.5px;margin-top:6px">단체사진 업로드는 스토리지 연결과 함께 열립니다.</p><div class="flabel">날짜</div><input class="finput" id="sessDate" placeholder="2026.07.18" /><div class="flabel">제목</div><input class="finput" id="sessTitle" placeholder="예: 7월 정기 학술 모임" /><div class="flabel">발표</div><input class="finput" id="sessBy" placeholder="예: 장진혁 외 4인" /><div class="flabel">주제</div><input class="finput" id="sessTopics" placeholder="예: RF 세팅 · 필러 합병증" /><button class="btn btn-primary" style="width:100%;margin-top:18px" onclick="submitSession()">'+(g?'수정하기':'추가')+'</button></div>';
+  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div class="eyebrow">Sessions</div><h3 style="margin-top:8px">'+(g?'모임 기록 수정':'모임 기록 추가')+'</h3><p style="color:var(--muted);font-size:12.5px;margin-top:6px">저장 후 카드를 열면 단체사진을 올릴 수 있어요.</p><div class="flabel">날짜</div><input class="finput" id="sessDate" placeholder="2026.07.18" /><div class="flabel">제목</div><input class="finput" id="sessTitle" placeholder="예: 7월 정기 학술 모임" /><div class="flabel">발표</div><input class="finput" id="sessBy" placeholder="예: 장진혁 외 4인" /><div class="flabel">주제</div><input class="finput" id="sessTopics" placeholder="예: RF 세팅 · 필러 합병증" /><button class="btn btn-primary" style="width:100%;margin-top:18px" onclick="submitSession()">'+(g?'수정하기':'추가')+'</button></div>';
   if(g){document.getElementById('sessDate').value=g.date||'';document.getElementById('sessTitle').value=g.title||'';document.getElementById('sessBy').value=g.by||'';document.getElementById('sessTopics').value=g.topics||'';}
   showModal();setTimeout(()=>{const el=document.getElementById('sessDate');if(el)el.focus();},60);
 }
@@ -852,19 +859,50 @@ function renderGatherings(){
   document.getElementById('gatherCards').innerHTML=list.map((g,i)=>{const gi=GATHERINGS.indexOf(g);const d=parseSessDate(g.date);const isUp=d&&d>=today;const dd=isUp?Math.round((d-today)/86400000):0;
   const media=g.img?'<div class="gphoto"><i style="background-image:url('+g.img+')"></i><div class="gov"></div><div class="gdate">'+g.date+'</div><div class="gn"><h4>'+g.title+'</h4><div class="gm">'+(g.by?'발표 · '+g.by:'')+'</div></div></div>':'<div class="gphoto gph" style="'+phBg(g.title)+'"><div class="gdate">'+g.date+'</div><div class="gn"><h4>'+g.title+'</h4><div class="gm">'+(g.by?'발표 · '+g.by:'')+'</div></div></div>';
   const foot=isUp?'<span style="color:var(--lav);font-weight:700">'+(dd===0?'D-DAY':'D-'+dd)+' · 예정</span>':'<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg>'+(g.att?g.att+'명 참석':'참석 기록 예정')+'</span>';
-  return '<div class="gcard" style="animation-delay:'+(i*55)+'ms" onclick="openGather('+gi+')">'+media+'<div class="gcard-foot">'+foot+'<span style="margin-left:auto;color:var(--lav)">'+(g.topics||'')+'</span></div></div>';}).join('')||'<div style="grid-column:1/-1;color:var(--muted);padding:44px 0;text-align:center;line-height:1.7">아직 기록된 모임이 없어요<br><span style="font-size:12.5px;color:var(--muted-2)">모임이 끝나면 \'기록 추가\'로 남겨주세요 · 단체사진은 곧 열립니다</span></div>'}
+  return '<div class="gcard" style="animation-delay:'+(i*55)+'ms" onclick="openGather('+gi+')">'+media+'<div class="gcard-foot">'+foot+'<span style="margin-left:auto;color:var(--lav)">'+(g.topics||'')+'</span></div></div>';}).join('')||'<div style="grid-column:1/-1;color:var(--muted);padding:44px 0;text-align:center;line-height:1.7">아직 기록된 모임이 없어요<br><span style="font-size:12.5px;color:var(--muted-2)">모임이 끝나면 \'기록 추가\'로 남기고 단체사진을 올려보세요</span></div>'}
 function renderMembers(){document.getElementById('memberGrid').innerHTML=MEMBERS.map((m,i)=>'<div class="member" style="animation-delay:'+(i*18)+'ms" onclick="openMember('+i+')"><div class="avatar" style="background:'+COLORS[i%COLORS.length]+'">'+m.n.slice(0,1)+'</div><div><div class="nm">'+m.n+'</div><div class="hp">'+m.hp+'</div></div></div>').join('')}
 
 /* ===== modals ===== */
+function commentSection(coll, item){
+  if(item.live===false || !item.live){ // 데모/구버전 항목엔 댓글 비활성 (실데이터만)
+  }
+  if(!item.live){ return '<div style="font-size:12.5px;color:var(--muted-2);padding:10px 0">저장된 글에만 댓글을 달 수 있어요.</div>'; }
+  window.__cmtCtx={coll,pid:item.id};
+  const box='<div class="cmt-box"><input id="cmtInput" placeholder="의견 남기기…" onkeydown="if(event.key===\'Enter\')sendComment()"/><button class="btn btn-primary" onclick="sendComment()">등록</button></div>';
+  const list='<div class="cmt-list" id="cmtList"><div style="font-size:12.5px;color:var(--muted-2);padding:8px 0">댓글을 불러오는 중…</div></div>';
+  if(window.AIA&&window.AIA.on&&window.__aiaWatchComments){
+    setTimeout(()=>window.__aiaWatchComments(coll,item.id,renderComments),30);
+  } else { setTimeout(()=>{const el=document.getElementById('cmtList');if(el)el.innerHTML='<div style="font-size:12.5px;color:var(--muted-2);padding:8px 0">댓글 기능은 로그인 후 사용할 수 있어요.</div>';},30); }
+  return list+box;
+}
+function renderComments(arr){
+  const el=document.getElementById('cmtList'); if(!el)return;
+  if(!arr||!arr.length){el.innerHTML='<div style="font-size:12.5px;color:var(--muted-2);padding:8px 0">아직 댓글이 없어요. 첫 의견을 남겨보세요.</div>';return;}
+  const me=window.CURRENT_USER||{};
+  el.innerHTML=arr.map(c=>{const can=(c.uid===me.uid||me.role==='admin');return '<div class="cmt">'+avatar(c.author,'#'+(('00000'+(hashColor(c.uid)>>>0).toString(16)).slice(-6)),28)+'<div class="cwrap"><div class="cb"><b>'+c.author+'</b>'+esc(c.text)+'</div><div class="ct">'+c.ago+'</div></div>'+(can?'<span class="cx" onclick="delComment(\''+c.id+'\')">삭제</span>':'')+'</div>';}).join('');
+}
+function hashColor(u){let h=0;for(const ch of (u||'x'))h=(h*31+ch.charCodeAt(0))>>>0;const pal=[0xE8836B,0xC4B3DC,0x86C9A6,0xE0B25E,0x7FA8D9,0xD98AB5,0x9C8CD8];return pal[h%pal.length];}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function sendComment(){
+  const el=document.getElementById('cmtInput'); if(!el)return; const t=el.value.trim(); if(!t)return;
+  el.value='';
+  const ctx=window.__cmtCtx||{};
+  if(window.AIA&&window.AIA.on&&window.__aiaAddComment){window.__aiaAddComment(ctx.coll,ctx.pid,t);}
+}
+function delComment(cid){
+  if(!confirm('댓글을 삭제할까요?'))return;
+  const ctx=window.__cmtCtx||{};
+  if(window.AIA&&window.AIA.on&&window.__aiaDeleteComment){window.__aiaDeleteComment(ctx.coll,ctx.pid,cid);}
+}
+
 function openCase(id){const c=CASES.find(x=>x.id===id);if(!c)return;
   const head=c.img?'<div class="modal-img" style="background-image:url('+c.img+')"><button class="modal-x" onclick="closeModal()">✕</button></div>':'<div class="modal-img gph" style="height:150px;'+phBg(c.tag)+'"><span>'+c.tag+'</span><button class="modal-x" onclick="closeModal()">✕</button></div>';
-  const disc=c.live?'<div style="font-size:13px;color:var(--muted-2);padding:14px 0 4px">댓글 기능은 곧 열립니다.</div>':'<div class="cmt">'+avatar('장','#E0B25E',28)+'<div><div class="cb"><b>장진혁</b>세팅 잘 봤습니다. 간격을 더 두면 PIH 줄어들 것 같아요.</div><div class="ct">12분 전</div></div></div><div class="cmt">'+avatar('이','#86C9A6',28)+'<div><div class="cb"><b>이현아</b>저도 비슷한 케이스 있었는데 TA 병합이 도움 됐습니다.</div><div class="ct">5분 전</div></div></div>';
-  document.getElementById('modalInner').innerHTML=head+'<div class="modal-body"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+avatar(c.author,c.color,30)+'<div><div style="font-weight:600">'+c.author+'</div><div style="font-size:11.5px;color:var(--muted-2)">'+c.ago+'</div></div><span class="ptag case" style="margin-left:auto">'+c.tag+'</span></div><h3>'+c.title+'</h3>'+(c.desc?'<p style="color:var(--muted);font-size:13.5px;margin:8px 0 16px">'+c.desc+'</p>':'<div style="margin-bottom:12px"></div>')+(c.tx?'<div class="kv"><div class="k">치료</div><div class="v">'+c.tx+'</div></div>':'')+(c.setting?'<div class="kv"><div class="k">세팅</div><div class="v">'+c.setting+'</div></div>':'')+(canEdit(c)?'<div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-ghost" style="flex:1" onclick="editCase(\''+c.id+'\')">수정</button><button class="btn btn-danger" onclick="deleteCase(\''+c.id+'\')">삭제</button></div>':'')+'<div style="margin-top:14px;font-family:\'Archivo\';font-weight:700;font-size:13px;letter-spacing:.04em;color:var(--coral)">DISCUSSION · '+c.cmts+'</div>'+disc+'</div>';
+  const manage=canEdit(c)?'<div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-ghost" style="flex:1" onclick="editCase(\''+c.id+'\')">수정</button><button class="btn btn-danger" onclick="deleteCase(\''+c.id+'\')">삭제</button></div>':'';
+  document.getElementById('modalInner').innerHTML=head+'<div class="modal-body"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+avatar(c.author,c.color,30)+'<div><div style="font-weight:600">'+c.author+'</div><div style="font-size:11.5px;color:var(--muted-2)">'+c.ago+'</div></div><span class="ptag case" style="margin-left:auto">'+c.tag+'</span></div><h3>'+c.title+'</h3>'+(c.desc?'<p style="color:var(--muted);font-size:13.5px;margin:8px 0 16px">'+esc(c.desc)+'</p>':'<div style="margin-bottom:12px"></div>')+(c.tx?'<div class="kv"><div class="k">치료</div><div class="v">'+esc(c.tx)+'</div></div>':'')+(c.setting?'<div class="kv"><div class="k">세팅</div><div class="v">'+esc(c.setting)+'</div></div>':'')+manage+'<div style="margin-top:18px;font-family:\'Archivo\';font-weight:700;font-size:13px;letter-spacing:.04em;color:var(--coral)">DISCUSSION</div>'+commentSection('rounds',c)+'</div>';
   showModal();}
 function openNote(id){const n=NOTES.find(x=>x.id===id);if(!n)return;
   const mng=canEdit(n)?'<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-ghost" style="flex:1" onclick="editNote(\''+n.id+'\')">수정</button><button class="btn btn-danger" onclick="deleteNote(\''+n.id+'\')">삭제</button></div>':'';
-  const disc=n.live?'<div style="font-size:13px;color:var(--muted-2);padding:12px 0 2px">댓글 기능은 곧 열립니다.</div>':'<div class="cmt">'+avatar('이','#86C9A6',28)+'<div><div class="cb"><b>이현아</b>완전 공감해요. 저도 그렇게 바꾼 뒤로 만족도가 올라갔어요.</div><div class="ct">방금</div></div></div>';
-  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'+avatar(n.author,n.color,34)+'<div><div style="font-weight:600">'+n.author+'</div><div style="font-size:11.5px;color:var(--muted-2)">'+n.ago+'</div></div><span class="ptag note" style="margin-left:auto">'+n.tag+'</span></div><div style="font-size:16px;line-height:1.65">'+n.text+'</div><div class="note-foot" style="margin:16px 0 4px">'+heart(n.likes)+bubble(n.cmts)+'</div>'+mng+'<div style="margin-top:10px;border-top:1px solid var(--line-soft);padding-top:6px"></div>'+disc+'</div>';
+  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'+avatar(n.author,n.color,34)+'<div><div style="font-weight:600">'+n.author+'</div><div style="font-size:11.5px;color:var(--muted-2)">'+n.ago+'</div></div><span class="ptag note" style="margin-left:auto">'+n.tag+'</span></div><div style="font-size:16px;line-height:1.65">'+esc(n.text)+'</div>'+mng+'<div style="margin-top:16px;border-top:1px solid var(--line-soft);padding-top:12px;font-family:\'Archivo\';font-weight:700;font-size:12px;letter-spacing:.04em;color:var(--lav)">COMMENTS</div>'+commentSection('notes',n)+'</div>';
   showModal();}
 function openMember(i){const m=MEMBERS[i];if(!m)return;
   const ints=(m.interests&&m.interests.length)?'<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:4px">'+m.interests.map(t=>'<span class="pill on" style="cursor:default;font-size:11px;padding:3px 10px">'+t+'</span>').join('')+'</div>':'<div style="font-size:12.5px;color:var(--muted-2);margin-top:4px">관심분야 미입력</div>';
@@ -880,10 +918,43 @@ function copyText(t){
 function fallbackCopy(t,done){const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){toast('복사 실패 — 길게 눌러 복사해 주세요');}ta.remove();}
 function openGather(i){const g=GATHERINGS[i];
   const head=g.img?'<div class="modal-img" style="background-image:url('+g.img+');height:300px"><button class="modal-x" onclick="closeModal()">✕</button></div>':'<div class="modal-img gph" style="height:150px;'+phBg(g.title)+'"><span>SESSION</span><button class="modal-x" onclick="closeModal()">✕</button></div>';
-  document.getElementById('modalInner').innerHTML=head+'<div class="modal-body"><div class="eyebrow">'+g.date+'</div><h3 style="margin-top:8px">'+g.title+'</h3>'+(g.by?'<div class="kv" style="margin-top:14px"><div class="k">발표</div><div class="v">'+g.by+'</div></div>':'')+(g.topics?'<div class="kv"><div class="k">주제</div><div class="v">'+g.topics+'</div></div>':'')+(g.att?'<div class="kv"><div class="k">참석</div><div class="v">'+g.att+'명</div></div>':'')+'<div style="font-size:12.5px;color:var(--muted-2);margin-top:14px">'+(g.img?'단체사진 1장이 보관되어 있습니다.':'단체사진은 스토리지 연결 후 올릴 수 있어요.')+'</div>'+(canEdit(g)?'<div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-ghost" style="flex:1" onclick="editSession(\''+g.id+'\')">수정</button><button class="btn btn-danger" onclick="deleteSession(\''+g.id+'\')">삭제</button></div>':'')+'</div>';
+  const canManage=canEdit(g);
+  const photoBtn=(canManage&&g.live)?'<button class="btn btn-ghost" onclick="document.getElementById(\'sessPhoto\').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-9 9"/></svg>'+(g.img?'사진 교체':'단체사진 올리기')+'</button><input type="file" id="sessPhoto" accept="image/*" style="display:none" onchange="uploadSessPhoto('+i+',this)">':'';
+  const manage=canManage?'<div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap">'+photoBtn+'<button class="btn btn-ghost" onclick="editSession(\''+g.id+'\')">수정</button><button class="btn btn-danger" onclick="deleteSession(\''+g.id+'\')">삭제</button></div>':'';
+  document.getElementById('modalInner').innerHTML=head+'<div class="modal-body"><div class="eyebrow">'+g.date+'</div><h3 style="margin-top:8px">'+g.title+'</h3>'+(g.by?'<div class="kv" style="margin-top:14px"><div class="k">발표</div><div class="v">'+esc(g.by)+'</div></div>':'')+(g.topics?'<div class="kv"><div class="k">주제</div><div class="v">'+esc(g.topics)+'</div></div>':'')+(g.att?'<div class="kv"><div class="k">참석</div><div class="v">'+g.att+'명</div></div>':'')+manage+'</div>';
   showModal();}
+function uploadSessPhoto(i,input){const f=input.files&&input.files[0];if(!f)return;const g=GATHERINGS[i];input.value='';
+  if(!f.type.startsWith('image/')){toast('이미지 파일만 올릴 수 있어요');return;}
+  if(!g.live){toast('저장된 모임 기록에만 사진을 올릴 수 있어요');return;}
+  toast('사진 처리 중…');
+  compressImage(f,1280,0.72,(dataUrl)=>{
+    if(!dataUrl){toast('이미지 처리 실패');return;}
+    // 낙관적: 즉시 표시
+    g.img=dataUrl;
+    if(!document.getElementById('page-sessions').classList.contains('hidden'))renderGatherings();
+    renderHome();openGather(i);
+    if(window.AIA&&window.AIA.on&&window.__aiaSetSessionPhoto){window.__aiaSetSessionPhoto(g.id,dataUrl);}
+    else toast('로그인 후 사용할 수 있어요');
+  });
+}
+function compressImage(file,maxDim,quality,cb){
+  const img=new Image();const url=URL.createObjectURL(file);
+  img.onload=()=>{
+    let{width:w,height:h}=img;
+    if(w>maxDim||h>maxDim){const r=Math.min(maxDim/w,maxDim/h);w=Math.round(w*r);h=Math.round(h*r);}
+    const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+    cv.getContext('2d').drawImage(img,0,0,w,h);
+    URL.revokeObjectURL(url);
+    let q=quality,out=cv.toDataURL('image/jpeg',q);
+    // 700KB 초과 시 화질 낮춰 재시도 (Firestore 1MB 문서 안전)
+    while(out.length>720000&&q>0.4){q-=0.1;out=cv.toDataURL('image/jpeg',q);}
+    cb(out.length>950000?null:out);
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);cb(null);};
+  img.src=url;
+}
 function showModal(){document.getElementById('modalInner').style.maxWidth='';document.getElementById('modal').classList.add('show');document.body.style.overflow='hidden'}
-function closeModal(){document.getElementById('modal').classList.remove('show');document.body.style.overflow=''}
+function closeModal(){if(window.__aiaStopComments)window.__aiaStopComments();window.__cmtCtx=null;document.getElementById('modal').classList.remove('show');document.body.style.overflow=''}
 
 /* ===== calendar / upload / lecture ===== */
 function openCalendar(){
@@ -998,7 +1069,7 @@ if (FIREBASE_ON) {
     const V = "https://www.gstatic.com/firebasejs/11.3.0";
     const { initializeApp } = await import(`${V}/firebase-app.js`);
     const { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } = await import(`${V}/firebase-auth.js`);
-    const { initializeFirestore, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, doc, getDoc, setDoc, updateDoc, deleteDoc } = await import(`${V}/firebase-firestore.js`);
+    const { initializeFirestore, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, doc, getDoc, setDoc, updateDoc, deleteDoc, increment } = await import(`${V}/firebase-firestore.js`);
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = initializeFirestore(app, { experimentalForceLongPolling: true, useFetchStreams: false });
@@ -1122,6 +1193,34 @@ if (FIREBASE_ON) {
     window.__aiaDeleteCase = async (id)=>{ if(isTemp(id))return; try{ await deleteDoc(doc(db,'rounds',id)); }catch(e){ console.error(e); toast('삭제 실패: '+e.code); } };
     window.__aiaUpdateSession = async (id,f)=>{ if(isTemp(id))return; try{ await updateDoc(doc(db,'sessions',id),{title:f.title,date:f.date,presenters:f.by,topics:f.topics}); }catch(e){ console.error(e); toast('수정 실패: '+e.code); } };
     window.__aiaDeleteSession = async (id)=>{ if(isTemp(id))return; try{ await deleteDoc(doc(db,'sessions',id)); }catch(e){ console.error(e); toast('삭제 실패: '+e.code); } };
+
+    // 세션 단체사진 (공하 방식: 압축→Firestore 저장, 무료)
+    window.__aiaSetSessionPhoto = async (id, dataUrl)=>{
+      const u=auth.currentUser; if(!u) return;
+      try{ await updateDoc(doc(db,'sessions',id),{ photoUrl:dataUrl }); }
+      catch(e){ console.error('[session photo]',e); toast(e.code==='resource-exhausted'?'사진 용량이 커요 — 더 작은 사진으로 시도해 주세요':'사진 저장 실패: '+(e.code||e.message)); }
+    };
+
+    // 댓글 (rounds/notes 하위 컬렉션)
+    let cmtUnsub=null;
+    window.__aiaWatchComments = (coll, pid, cb)=>{
+      if(cmtUnsub){cmtUnsub();cmtUnsub=null;}
+      if(!coll||!pid||isTemp(pid)){cb(null);return;}
+      const qy=query(collection(db,coll,pid,'comments'), orderBy('createdAt','asc'));
+      cmtUnsub=onSnapshot(qy,(snap)=>{const arr=[];snap.forEach(d=>{const c=d.data({serverTimestamps:'estimate'});arr.push({id:d.id,uid:c.authorUid,author:c.authorName||'회원',text:c.text||'',ago:timeAgo(c.createdAt)});});cb(arr);},(e)=>console.warn('[comments]',e));
+    };
+    window.__aiaStopComments = ()=>{ if(cmtUnsub){cmtUnsub();cmtUnsub=null;} };
+    window.__aiaAddComment = async (coll, pid, text)=>{
+      const u=auth.currentUser; if(!u||isTemp(pid))return;
+      try{
+        await addDoc(collection(db,coll,pid,'comments'),{text,authorUid:u.uid,authorName:(u.displayName||u.email.split('@')[0]),createdAt:serverTimestamp()});
+        await updateDoc(doc(db,coll,pid),{commentCount:increment(1)});
+      }catch(e){console.error('[comment add]',e);toast('댓글 등록 실패: '+e.code);}
+    };
+    window.__aiaDeleteComment = async (coll, pid, cid)=>{
+      try{ await deleteDoc(doc(db,coll,pid,'comments',cid)); await updateDoc(doc(db,coll,pid),{commentCount:increment(-1)}); }
+      catch(e){console.error('[comment del]',e);toast('삭제 실패: '+e.code);}
+    };
 
     // 프로필: members/{uid} 로드 → 화면 반영
     const loadProfile = async (user)=>{
