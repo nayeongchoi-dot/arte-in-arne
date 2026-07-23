@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <title>Arte in Arne — Clinical Community</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -237,6 +238,37 @@
   .rrow .rm{font-size:11.5px;color:var(--muted-2);margin-top:1px}
   .rrow .rsize{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
   .rcat{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+  .embed{position:relative;width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;margin:14px 0}
+  .embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .lecmeta{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .rlink{margin-left:auto;font-size:11px;font-weight:700;color:var(--lav);border:1px solid rgba(196,179,220,.35);border-radius:20px;padding:3px 10px;flex:none}
+  /* Partners */
+  .pgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .pcard{border:1px solid var(--line-soft);border-radius:14px;background:var(--ink-1);padding:16px 17px;cursor:pointer;transition:box-shadow .3s ease,border-color .2s ease;display:flex;flex-direction:column;gap:8px;opacity:0;animation:cardIn .5s cubic-bezier(.22,.61,.36,1) forwards}
+  .pcard:hover{border-color:var(--line);box-shadow:0 14px 32px -18px rgba(0,0,0,.65)}
+  .pcard .ph{display:flex;align-items:flex-start;gap:9px}
+  .pcard .pn{font-size:16px;font-weight:700;letter-spacing:-.01em;line-height:1.3}
+  .pcard .pcat{font-size:10.5px;font-weight:700;color:var(--coral);letter-spacing:.04em}
+  .stars{color:#E0B25E;font-size:12.5px;letter-spacing:.06em}
+  .stars .off{color:var(--line)}
+  .pmeta{font-size:12.5px;color:var(--muted);line-height:1.55}
+  .pfoot{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted-2);margin-top:auto;padding-top:9px;border-top:1px solid var(--line-soft)}
+  .pfoot b{color:var(--coral);font-weight:700}
+  .vbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--good);border:1px solid rgba(134,201,166,.4);border-radius:20px;padding:2px 8px;flex:none}
+  .pbadge{font-size:10px;font-weight:800;letter-spacing:.05em;color:var(--lav);border:1px solid rgba(196,179,220,.4);border-radius:20px;padding:2px 8px;flex:none}
+  .endorse{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:11px;border-radius:11px;border:1px solid var(--line);font-weight:700;font-size:13.5px;transition:.15s}
+  .endorse:hover{border-color:var(--coral);color:var(--coral)}
+  .endorse.on{background:var(--coral);border-color:var(--coral);color:#2a0f12}
+  .endorse svg{width:16px;height:16px}
+  .rev{padding:12px 0;border-bottom:1px solid var(--line-soft)}
+  .rev:last-child{border-bottom:none}
+  .rev .rh{display:flex;align-items:center;gap:8px;font-size:12.5px}
+  .rev .rh b{font-weight:600}
+  .rev .rt{font-size:13.5px;line-height:1.6;margin-top:5px;color:var(--txt)}
+  .rev.caution{background:rgba(232,107,107,.05);border-left:2px solid rgba(232,107,107,.5);padding-left:11px;border-radius:0 8px 8px 0}
+  .starpick{display:flex;gap:5px;font-size:24px;color:var(--line);cursor:pointer;margin:4px 0}
+  .starpick span{transition:.12s}.starpick span.on{color:#E0B25E}
+  .pnote{font-size:12px;color:var(--muted-2);line-height:1.6;background:var(--ink-2);border-radius:10px;padding:11px 13px;margin-top:12px}
 
   .gcards{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
   .gcard{border-radius:var(--r);overflow:hidden;border:1px solid var(--line-soft);background:var(--ink-1);cursor:pointer;transition:box-shadow .4s ease,border-color .3s ease}
@@ -359,7 +391,7 @@
     .scrim.show{display:block}
   }
   @media(max-width:480px){.stat-row{grid-template-columns:1fr 1fr}}
-  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.gcase,.rc,.gcard,.note,.jcard,.member{opacity:1!important}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.gcase,.rc,.gcard,.note,.jcard,.member,.pcard{opacity:1!important}}
   :focus-visible{outline:2px solid var(--lav);outline-offset:2px;border-radius:6px}
 </style>
 </head>
@@ -466,19 +498,29 @@
         <p class="pdesc">강의 · 논문 · 자료를 한곳에. 우리의 지식 금고.</p></div></div>
         <div class="seg" id="libType">
           <button class="on" data-t="강의" onclick="setLibTab('강의')">Lectures</button>
-          <button data-t="논문" onclick="setLibTab('논문')">Papers</button>
           <button data-t="자료" onclick="setLibTab('자료')">Resources</button>
         </div>
         <div id="libLectures">
-          <div class="upbar"><div class="upnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m22 8-10 5L2 8l10-5 10 5Z"/><path d="M6 10v6c0 1 3 3 6 3s6-2 6-3v-6"/></svg>영상은 유튜브·Vimeo 링크로 임베드돼요. 대용량 파일 직접 업로드는 지원하지 않습니다.</div><button class="btn btn-ghost" onclick="toast('강의 업로드는 곧 열립니다')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>강의 추가</button></div>
+          <div class="upbar"><div class="upnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m22 8-10 5L2 8l10-5 10 5Z"/><path d="M6 10v6c0 1 3 3 6 3s6-2 6-3v-6"/></svg>유튜브 · Vimeo · 구글드라이브 영상 링크를 붙이면 임베드됩니다.</div><button class="btn btn-ghost" onclick="composeLecture()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>강의 추가</button></div>
           <div class="cards" id="academyCards"></div>
         </div>
-        <div id="libPapers" style="display:none"><div class="cards" id="journalCards"></div></div>
-        <div id="libResources" style="display:none">
-          <div class="upbar"><div class="upnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2v6h6M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/></svg>문서 파일 100MB 이하 · PPT · PDF · 동의서 · 차팅 · 논문</div><input type="file" id="resFile" style="display:none" onchange="checkUpload(this)" /><button class="btn btn-ghost" onclick="toast('자료 업로드는 곧 열립니다')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5-5 5 5M12 5v10"/></svg>자료 업로드</button></div>
+                <div id="libResources" style="display:none">
+          <div class="upbar"><div class="upnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2v6h6M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/></svg><span id="resUpNote">작은 파일은 앱에 저장 · 큰 파일은 드라이브 링크로 등록</span></div><button class="btn btn-ghost" onclick="composeResource()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5-5 5 5M12 5v10"/></svg>자료 업로드</button></div>
           <div class="rcat" id="resCat"></div>
           <div class="card" style="padding:0 18px"><div class="rtable" id="resTable"></div></div>
         </div>
+      </section>
+
+      <!-- ===== PARTNERS ===== -->
+      <section class="page hidden" id="page-partners">
+        <div class="phead">
+          <div><div class="eyebrow">Trusted Network</div><h1 class="ptitle">Partners</h1>
+          <p class="pdesc">회원이 직접 거래해 본 곳만 올립니다. 업체가 홍보하는 공간이 아니라, 동료의 경험이 쌓이는 곳이에요.</p></div>
+          <button class="btn btn-primary" onclick="composePartner()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>업체 추천</button>
+        </div>
+        <div id="pendingBar"></div>
+        <div class="rcat" id="partnerCats"></div>
+        <div class="pgrid" id="partnerGrid"></div>
       </section>
 
       <!-- ===== SESSIONS ===== -->
@@ -619,7 +661,6 @@ const NEWCMTS=[
   {who:'유운영',color:'#7FA8D9',on:'NLF 필러 후 결절',text:'cannula 게이지 올린 뒤로 결절이 줄었습니다',ago:'1시간 전'}
 ];
 
-const JOURNALS=[];
 
 const ACADEMY=[];
 
@@ -653,6 +694,7 @@ const NAV=[
   {id:'rounds',label:'Rounds',icon:'M4 7h12v12H4z M8 4h12v12'},
   {id:'notebook',label:'Notebook',icon:'M12 20h9 M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'},
   {id:'library',label:'Library',icon:'M4 19V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2Zm0 0a2 2 0 0 1 2-2h13'},
+  {id:'partners',label:'Partners',icon:'M3 21h18 M5 21V7l8-4v18 M19 21V11l-6-4 M9 9v.01 M9 12v.01 M9 15v.01'},
   {id:'sessions',label:'Sessions',icon:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z'},
   {id:'circle',label:'Circle',icon:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm13 10v-2a4 4 0 0 0-3-3.8M16 3.1a4 4 0 0 1 0 7.7',badge:'44'}
 ];
@@ -747,7 +789,7 @@ function submitNote(){
     return;
   }
   const myColor=(document.getElementById('meAvatar')&&document.getElementById('meAvatar').style.background)||'#E8836B';
-  NOTES.unshift({id:'local'+Date.now(),uid:(window.CURRENT_USER&&window.CURRENT_USER.uid),live:true,author:(window.CURRENT_USER&&window.CURRENT_USER.name)||'회원',color:myColor,tag,ago:'방금',text,likes:0,cmts:0});
+  NOTES.unshift({id:localId('local'),uid:(window.CURRENT_USER&&window.CURRENT_USER.uid),live:true,author:(window.CURRENT_USER&&window.CURRENT_USER.name)||'회원',color:myColor,tag,ago:'방금',text,likes:0,cmts:0});
   if(!document.getElementById('page-notebook').classList.contains('hidden'))renderNotebook();
   renderHome();closeModal();toast('생각을 남겼습니다');
   if(window.AIA&&window.AIA.on&&window.__aiaAddNote)window.__aiaAddNote(text,tag);
@@ -790,7 +832,7 @@ function submitCase(){
     return;
   }
   const myColor=(document.getElementById('meAvatar')&&document.getElementById('meAvatar').style.background)||'#E8836B';
-  CASES.unshift(Object.assign({id:'lc'+Date.now(),uid:(window.CURRENT_USER&&window.CURRENT_USER.uid),author:(window.CURRENT_USER&&window.CURRENT_USER.name)||'회원',color:myColor,ago:'방금',img:null,h:190,likes:0,cmts:0,live:true},f));
+  CASES.unshift(Object.assign({id:localId('lc'),uid:(window.CURRENT_USER&&window.CURRENT_USER.uid),author:(window.CURRENT_USER&&window.CURRENT_USER.name)||'회원',color:myColor,ago:'방금',img:null,h:190,likes:0,cmts:0,live:true},f));
   INDEX=buildIndex();if(!document.getElementById('page-rounds').classList.contains('hidden'))renderRounds();renderHome();closeModal();toast('증례를 올렸습니다');
   if(window.AIA&&window.AIA.on&&window.__aiaAddCase)window.__aiaAddCase(f);
 }
@@ -827,7 +869,7 @@ function submitSession(){
     if(window.AIA&&window.AIA.on&&window.__aiaUpdateSession)window.__aiaUpdateSession(id,f);
     return;
   }
-  GATHERINGS.unshift(Object.assign({id:'ls'+Date.now(),uid:(window.CURRENT_USER&&window.CURRENT_USER.uid),img:null,att:null,live:true},f));
+  GATHERINGS.unshift(Object.assign({id:localId('ls'),uid:(window.CURRENT_USER&&window.CURRENT_USER.uid),img:null,att:null,live:true},f));
   INDEX=buildIndex();if(!document.getElementById('page-sessions').classList.contains('hidden'))renderGatherings();renderHome();closeModal();toast('모임 기록을 추가했습니다');
   if(window.AIA&&window.AIA.on&&window.__aiaAddSession)window.__aiaAddSession(f);
 }
@@ -840,18 +882,148 @@ function deleteSession(id){
   if(window.AIA&&window.AIA.on&&window.__aiaDeleteSession)window.__aiaDeleteSession(id);
 }
 
-function renderAcademy(){document.getElementById('academyCards').innerHTML=ACADEMY.map((a,i)=>'<div class="card jcard" style="animation-delay:'+(i*45)+'ms" onclick="toast(\'강의 재생 · 자료 다운로드\')"><div class="vthumb"><i style="background-image:url('+a.img+')"></i><div class="play"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div><div class="dur">'+a.dur+'</div></div><div class="src">'+a.tag+'</div><h4>'+a.title+'</h4><div class="meta">by '+a.by+'</div><div class="badge-file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>'+a.files+'</div></div>').join('')||'<div style="grid-column:1/-1;color:var(--muted);padding:44px 0;text-align:center;line-height:1.7">아직 등록된 강의가 없어요<br><span style="font-size:12.5px;color:var(--muted-2)">모임 발표 영상과 슬라이드가 이곳에 쌓입니다 · 업로드는 곧 열립니다</span></div>'}
-function renderJournal(){document.getElementById('journalCards').innerHTML=JOURNALS.map((j,i)=>'<div class="card jcard" style="animation-delay:'+(i*45)+'ms" onclick="toast(\'논문 요약 · PDF · Discussion 열기\')"><div class="src">'+j.src+' · '+j.year+'</div><h4>'+j.title+'</h4><p>'+j.sum+'</p><div class="meta"><span class="badge-file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2v6h6M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/></svg>'+j.file+'</span><span>· 요약 · Discussion</span></div></div>').join('')||'<div style="grid-column:1/-1;color:var(--muted);padding:44px 0;text-align:center;line-height:1.7">아직 등록된 논문이 없어요<br><span style="font-size:12.5px;color:var(--muted-2)">저널클럽에서 다룬 논문이 이곳에 정리됩니다 · 곧 열립니다</span></div>'}
+function ytOrigin(){try{return (typeof location!=='undefined'&&location.protocol==='https:')?'&origin='+encodeURIComponent(location.origin):'';}catch(e){return '';}}
+function embedUrl(u,mode){
+  if(!u)return null;u=String(u).trim();
+  mode=mode||window.__ytMode||0;
+  let m=u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([\w-]{11})/);
+  if(m){const host=mode===1?'https://www.youtube.com':'https://www.youtube-nocookie.com';
+        return host+'/embed/'+m[1]+'?rel=0&playsinline=1'+ytOrigin();}
+  m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if(m)return 'https://player.vimeo.com/video/'+m[1];
+  m=u.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
+  if(m)return 'https://drive.google.com/file/d/'+m[1]+'/preview';
+  return null;
+}
+function ytThumb(emb){if(emb&&emb.indexOf('/embed/')>-1&&emb.indexOf('youtube')>-1){return 'https://img.youtube.com/vi/'+emb.split('/embed/')[1].split('?')[0]+'/hqdefault.jpg';}return null;}
+window.setLiveLectures=function(arr){ACADEMY.length=0;arr.forEach(a=>ACADEMY.push(a));INDEX=buildIndex();renderAcademy();};
+window.setLiveResources=function(arr){RES.length=0;arr.forEach(r=>RES.push(r));INDEX=buildIndex();renderResources();};
+function renderAcademy(){
+  const box=document.getElementById('academyCards');if(!box)return;
+  box.innerHTML=ACADEMY.map((a,i)=>{const emb=embedUrl(a.url);const th=ytThumb(emb);
+    return '<div class="card jcard" style="animation-delay:'+(i*45)+'ms" onclick="playLecture(\''+a.id+'\')"><div class="vthumb">'+(th?'<i style="background-image:url('+th+')"></i>':'<i style="'+phBg(a.tag||a.title)+'"></i>')+'<div class="play"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div></div><div class="src">'+esc(a.tag||'LECTURE')+'</div><h4>'+esc(a.title)+'</h4><div class="lecmeta">by '+esc(a.by||'회원')+'</div></div>';
+  }).join('')||'<div style="grid-column:1/-1;color:var(--muted);padding:44px 0;text-align:center;line-height:1.7">아직 등록된 강의가 없어요<br><span style="font-size:12.5px;color:var(--muted-2)">유튜브 · Vimeo · 드라이브 영상 링크로 강의를 추가해 보세요</span></div>';
+}
+function playLecture(id){const a=ACADEMY.find(x=>x.id===id);if(!a)return;const emb=embedUrl(a.url);
+  const isLocal=(typeof location!=='undefined'&&location.protocol==='file:');
+  const help='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;padding:10px 12px;background:var(--ink-2);border-radius:10px"><span style="font-size:12px;color:var(--muted);flex:1;min-width:150px">재생이 안 되나요? (오류 153 등)</span><button class="btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="switchPlayer(\''+a.id+'\')">플레이어 전환</button><a class="btn btn-ghost" style="padding:6px 12px;font-size:12px" href="'+esc(a.url||'#')+'" target="_blank" rel="noopener">YouTube에서 보기 ↗</a></div>';
+  const player=emb?'<div class="embed"><iframe src="'+emb+'" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>'+(isLocal?'<div style="font-size:12px;color:var(--coral);margin-top:-6px;margin-bottom:10px">로컬 파일로 열면 재생이 막힐 수 있어요 (오류 153) — 배포 주소에서 확인해 주세요</div>':'')+help:'<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">영상 링크를 인식하지 못했어요.<br><a href="'+esc(a.url||'#')+'" target="_blank" rel="noopener" style="color:var(--lav);text-decoration:underline">원본 링크 열기 ↗</a></div>';
+  const mng=canEdit(a)?'<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-ghost" style="flex:1" onclick="editLecture(\''+a.id+'\')">수정</button><button class="btn btn-danger" onclick="deleteLecture(\''+a.id+'\')">삭제</button></div>':'';
+  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div class="eyebrow">'+esc(a.tag||'LECTURE')+'</div><h3 style="margin-top:8px">'+esc(a.title)+'</h3><div class="lecmeta">by '+esc(a.by||'회원')+(a.ago?' · '+a.ago:'')+'</div>'+player+(a.desc?'<p style="color:var(--muted);font-size:13.5px;line-height:1.6">'+esc(a.desc)+'</p>':'')+mng+'</div>';
+  showModal();const mi=document.getElementById('modalInner');if(mi)mi.style.maxWidth='680px';
+}
+function switchPlayer(id){window.__ytMode=(window.__ytMode===1?0:1);
+  toast(window.__ytMode===1?'표준 플레이어로 전환했습니다':'개인정보 보호 플레이어로 전환했습니다');
+  playLecture(id);}
+function composeLecture(editId){window.__editLecId=editId||null;const a=editId?ACADEMY.find(x=>x.id===editId):null;
+  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div class="eyebrow">Lectures</div><h3 style="margin-top:8px">'+(a?'강의 수정':'강의 추가')+'</h3><p style="color:var(--muted);font-size:12.5px;margin-top:6px">유튜브 · Vimeo · 구글드라이브 영상 링크를 붙여넣으면 임베드됩니다.</p><div class="flabel">제목</div><input class="finput" id="lecTitle" placeholder="예: 색소질환 레이저 세팅 총정리" /><div class="flabel">영상 링크</div><input class="finput" id="lecUrl" placeholder="https://youtu.be/... · vimeo.com/... · drive 링크" /><div class="flabel">주제</div><div id="lecTagPick" class="topics"></div><div class="flabel">설명 (선택)</div><textarea class="finput" id="lecDesc" style="min-height:70px;resize:vertical;font-family:inherit" placeholder="강의 소개 · 참고자료 등"></textarea><button class="btn btn-primary" style="width:100%;margin-top:18px" onclick="submitLecture()">'+(a?'수정하기':'추가')+'</button></div>';
+  document.getElementById('lecTagPick').innerHTML=TOPICS.map((t,i)=>'<span class="pill'+((a?t===a.tag:i===0)?' on':'')+'" data-t="'+t+'" onclick="pickNoteTag(this)">'+t+'</span>').join('');
+  if(a){document.getElementById('lecTitle').value=a.title||'';document.getElementById('lecUrl').value=a.url||'';document.getElementById('lecDesc').value=a.desc||'';}
+  showModal();
+}
+function submitLecture(){const t=(document.getElementById('lecTitle').value||'').trim();const url=(document.getElementById('lecUrl').value||'').trim();
+  if(!t){toast('제목을 입력해 주세요');return;}
+  if(!url){toast('영상 링크를 입력해 주세요');return;}
+  if(!embedUrl(url)){toast('유튜브 · Vimeo · 드라이브 링크만 임베드돼요');return;}
+  const te=document.querySelector('#lecTagPick .pill.on');const tag=te?te.dataset.t:'Pigment';
+  const f={title:t,url:url,tag:tag,desc:(document.getElementById('lecDesc').value||'').trim()};
+  if(window.__editLecId){const id=window.__editLecId;const a=ACADEMY.find(x=>x.id===id);if(a)Object.assign(a,f);window.__editLecId=null;INDEX=buildIndex();renderAcademy();closeModal();toast('강의를 수정했습니다');if(window.AIA&&window.AIA.on&&window.__aiaUpdateLecture)window.__aiaUpdateLecture(id,f);return;}
+  ACADEMY.unshift(Object.assign({id:localId('ll'),uid:(window.CURRENT_USER&&window.CURRENT_USER.uid),by:(window.CURRENT_USER&&window.CURRENT_USER.name)||'회원',ago:'방금',live:true},f));
+  INDEX=buildIndex();renderAcademy();closeModal();toast('강의를 추가했습니다');
+  if(window.AIA&&window.AIA.on&&window.__aiaAddLecture)window.__aiaAddLecture(f);
+}
+function editLecture(id){closeModal();composeLecture(id);}
+function deleteLecture(id){if(!confirm('이 강의를 삭제할까요?'))return;const i=ACADEMY.findIndex(x=>x.id===id);if(i>-1)ACADEMY.splice(i,1);INDEX=buildIndex();renderAcademy();closeModal();toast('강의를 삭제했습니다');if(window.AIA&&window.AIA.on&&window.__aiaDeleteLecture)window.__aiaDeleteLecture(id);}
 let resCat='전체';
-function renderResources(){const cats=['전체','동의서','차팅','논문','PPT','보험'];document.getElementById('resCat').innerHTML=cats.map(c=>'<span class="pill '+(c===resCat?'on':'')+'" onclick="setRes(\''+c+'\')">'+c+'</span>').join('');const list=resCat==='전체'?RES:RES.filter(r=>r.cat===resCat);document.getElementById('resTable').innerHTML=list.map(r=>'<div class="rrow" onclick="toast(\''+r.n+' 열기\')"><div class="ricon" style="background:'+r.c+'22;color:'+r.c+'">'+r.type+'</div><div style="flex:1;min-width:0"><div class="rn">'+r.n+'</div><div class="rm">'+r.cat+' · '+r.type+'</div></div><div class="rsize">'+r.size+'</div></div>').join('')}
+function renderResources(){
+  const un=document.getElementById('resUpNote');
+  if(un)un.textContent=(window.__aiaHasStorage&&window.__aiaHasStorage())?'파일 최대 300MB 직접 업로드 · 그 이상은 드라이브 링크':'작은 파일(700KB↓)은 앱에 저장 · 큰 파일은 드라이브 링크로 등록';
+  const cats=['전체','논문','동의서','차팅','발표자료','기타'];
+  const rc=document.getElementById('resCat');if(rc)rc.innerHTML=cats.map(c=>'<span class="pill '+(c===resCat?'on':'')+'" onclick="setRes(\''+c+'\')">'+c+'</span>').join('');
+  const list=resCat==='전체'?RES:RES.filter(r=>r.cat===resCat);
+  const box=document.getElementById('resTable');if(!box)return;
+  box.innerHTML=list.map(r=>{const isLink=r.kind==='link';
+    const meta=r.cat+' · '+(isLink?'외부 링크':(r.type||'파일')+(r.size?' · '+r.size:''));
+    return '<div class="rrow" onclick="openResource(\''+r.id+'\')"><div class="ricon" style="background:'+(r.c||'#7FA8D9')+'22;color:'+(r.c||'#7FA8D9')+'">'+(isLink?'↗':esc(r.type||'FILE'))+'</div><div style="flex:1;min-width:0"><div class="rn">'+esc(r.n)+'</div><div class="rm">'+esc(meta)+'</div></div>'+(isLink?'<span class="rlink">링크</span>':'')+'</div>';
+  }).join('')||'<div style="color:var(--muted);padding:44px 0;text-align:center;line-height:1.7">아직 등록된 자료가 없어요<br><span style="font-size:12.5px;color:var(--muted-2)">논문 · 동의서 · 차팅 · 발표자료를 파일 또는 드라이브 링크로 올려보세요</span></div>';
+}
+function openResource(id){const r=RES.find(x=>x.id===id);if(!r)return;
+  const mng=canEdit(r)?'<div style="margin-top:12px"><button class="btn btn-danger" style="width:100%" onclick="deleteResource(\''+r.id+'\')">삭제</button></div>':'';
+  const action=(r.kind==='link')
+    ? '<a class="btn btn-primary" style="width:100%" href="'+esc(r.url)+'" target="_blank" rel="noopener">드라이브에서 열기 ↗</a>'
+    : (r.url? '<a class="btn btn-primary" style="width:100%" href="'+esc(r.url)+'" target="_blank" rel="noopener" download>다운로드</a>'
+            : '<a class="btn btn-primary" style="width:100%" href="'+esc(r.data||'#')+'" download="'+esc(r.n)+'">다운로드</a>');
+  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div class="eyebrow">'+esc(r.cat)+'</div><h3 style="margin-top:8px">'+esc(r.n)+'</h3><div class="lecmeta">올린이 '+esc(r.by||'회원')+(r.ago?' · '+r.ago:'')+' · '+(r.kind==='link'?'외부 링크':esc(r.type||'파일')+(r.size?' · '+r.size:''))+'</div><div style="margin-top:18px">'+action+'</div>'+mng+'</div>';
+  showModal();const mi=document.getElementById('modalInner');if(mi)mi.style.maxWidth='420px';
+}
+function composeResource(){window.__resMode='file';
+  const cats=['논문','동의서','차팅','발표자료','기타'];
+  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div class="eyebrow">Resources</div><h3 style="margin-top:8px">자료 추가</h3><div class="seg" style="margin:14px 0 4px"><button class="on" id="resModeFile" onclick="setResMode(\'file\')">파일 업로드</button><button id="resModeLink" onclick="setResMode(\'link\')">드라이브 링크</button></div><div class="flabel">제목</div><input class="finput" id="resName" placeholder="예: 색소 레이저 세팅 표준 차팅" /><div class="flabel">분류</div><div id="resCatPick" class="topics"></div><div id="resFileWrap"><div class="flabel">파일</div><div id="resLimitNote" style="font-size:11.5px;color:var(--muted-2);margin-bottom:6px"></div><input type="file" class="finput" id="resFileInput" style="padding:9px" /><div style="font-size:11.5px;color:var(--muted-2);margin-top:6px">더 큰 파일은 위에서 \'드라이브 링크\'를 선택해 주세요</div></div><div id="resLinkWrap" style="display:none"><div class="flabel">공유 링크 (구글드라이브 · 네이버 MYBOX 등)</div><input class="finput" id="resUrl" placeholder="https://drive.google.com/..." /><div style="font-size:11.5px;color:var(--muted-2);margin-top:6px">공유 권한을 \'링크가 있는 모든 사용자\'로 설정해 주세요</div></div><button class="btn btn-primary" style="width:100%;margin-top:18px" onclick="submitResource()">추가</button></div>';
+  document.getElementById('resCatPick').innerHTML=cats.map((t,i)=>'<span class="pill'+(i===0?' on':'')+'" data-t="'+t+'" onclick="pickNoteTag(this)">'+t+'</span>').join('');
+  showModal();
+  const ln=document.getElementById('resLimitNote');if(ln)ln.textContent=(window.__aiaHasStorage&&window.__aiaHasStorage())?'최대 300MB까지 올릴 수 있어요':'현재 700KB 이하만 가능 · 큰 파일은 드라이브 링크를 이용해 주세요';
+}
+function setResMode(m){window.__resMode=m;
+  const bf=document.getElementById('resModeFile'),bl=document.getElementById('resModeLink');
+  if(bf)bf.classList.toggle('on',m==='file');if(bl)bl.classList.toggle('on',m==='link');
+  const wf=document.getElementById('resFileWrap'),wl=document.getElementById('resLinkWrap');
+  if(wf)wf.style.display=m==='file'?'':'none';if(wl)wl.style.display=m==='link'?'':'none';
+}
+function submitResource(){
+  const n=(document.getElementById('resName').value||'').trim();if(!n){toast('제목을 입력해 주세요');return;}
+  const ce=document.querySelector('#resCatPick .pill.on');const cat=ce?ce.dataset.t:'기타';
+  const COLORS_RES={'논문':'#E8836B','동의서':'#7FA8D9','차팅':'#86C9A6','발표자료':'#E0B25E','기타':'#C4B3DC'};
+  const mode=window.__resMode||'file';
+  const me=(window.CURRENT_USER&&window.CURRENT_USER.name)||'회원';
+  const uid=(window.CURRENT_USER&&window.CURRENT_USER.uid);
+  if(mode==='link'){
+    const url=(document.getElementById('resUrl').value||'').trim();
+    if(!/^https?:\/\//.test(url)){toast('올바른 링크(https://…)를 입력해 주세요');return;}
+    RES.unshift({id:localId('lr'),uid:uid,by:me,ago:'방금',live:true,kind:'link',n:n,cat:cat,url:url,c:COLORS_RES[cat]});
+    INDEX=buildIndex();renderResources();closeModal();toast('링크를 등록했습니다');
+    if(window.AIA&&window.AIA.on&&window.__aiaAddResource)window.__aiaAddResource({kind:'link',n:n,cat:cat,url:url});
+    return;
+  }
+  const inp=document.getElementById('resFileInput');const f=inp&&inp.files&&inp.files[0];
+  if(!f){toast('파일을 선택해 주세요');return;}
+  const ext=(f.name.split('.').pop()||'FILE').toUpperCase().slice(0,4);
+  const size=f.size>1048576?(f.size/1048576).toFixed(1)+' MB':Math.round(f.size/1024)+' KB';
+  const hasStorage=!!(window.__aiaHasStorage&&window.__aiaHasStorage());
+  const MAXSTORAGE=300*1048576;
+
+  // ① 스토리지 사용 가능 → 최대 300MB 직접 업로드
+  if(hasStorage&&window.__aiaUploadFile){
+    if(f.size>MAXSTORAGE){toast('300MB를 넘습니다 — 드라이브 링크로 올려주세요');return;}
+    const btn=document.querySelector('.modal-body .btn-primary');
+    if(btn){btn.textContent='업로드 중… 0%';btn.style.pointerEvents='none';}
+    window.__aiaUploadFile(f,(pct)=>{if(btn)btn.textContent='업로드 중… '+pct+'%';},(url,err)=>{
+      if(btn){btn.style.pointerEvents='';btn.textContent='추가';}
+      if(!url){toast(err==='storage/unauthorized'?'스토리지 권한 필요 — 규칙을 게시해 주세요':'업로드 실패: '+(err||'오류'));return;}
+      RES.unshift({id:localId('lf'),uid:uid,by:me,ago:'방금',live:true,kind:'file',n:n,cat:cat,type:ext,size:size,url:url,c:COLORS_RES[cat]});
+      INDEX=buildIndex();renderResources();closeModal();toast('자료를 올렸습니다');
+      if(window.AIA&&window.AIA.on&&window.__aiaAddResource)window.__aiaAddResource({kind:'file',n:n,cat:cat,type:ext,size:size,url:url});
+    });
+    return;
+  }
+
+  // ② 스토리지 없음 → 700KB 이하만 앱에 직접 저장
+  if(f.size>720000){toast('이 파일은 '+size+'예요 — 700KB 초과는 \'드라이브 링크\'로 올려주세요');return;}
+  const reader=new FileReader();
+  reader.onload=function(){
+    RES.unshift({id:localId('lf'),uid:uid,by:me,ago:'방금',live:true,kind:'file',n:n,cat:cat,type:ext,size:size,data:reader.result,c:COLORS_RES[cat]});
+    INDEX=buildIndex();renderResources();closeModal();toast('자료를 올렸습니다');
+    if(window.AIA&&window.AIA.on&&window.__aiaAddResource)window.__aiaAddResource({kind:'file',n:n,cat:cat,type:ext,size:size,data:reader.result});
+  };
+  reader.readAsDataURL(f);
+}
+function deleteResource(id){if(!confirm('이 자료를 삭제할까요?'))return;const i=RES.findIndex(x=>x.id===id);if(i>-1)RES.splice(i,1);INDEX=buildIndex();renderResources();closeModal();toast('자료를 삭제했습니다');if(window.AIA&&window.AIA.on&&window.__aiaDeleteResource)window.__aiaDeleteResource(id);}
 function setRes(c){resCat=c;renderResources()}
-function renderLibrary(){renderAcademy();renderJournal()}
+function renderLibrary(){renderAcademy();renderResources()}
 function setLibTab(t){
   document.querySelectorAll('#libType button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
   document.getElementById('libLectures').style.display=t==='강의'?'':'none';
-  document.getElementById('libPapers').style.display=t==='논문'?'':'none';
   document.getElementById('libResources').style.display=t==='자료'?'':'none';
-  if(t==='자료')renderResources();
+  if(t==='자료')renderResources();else renderAcademy();
 }
 function renderGatherings(){
   const today=new Date();today.setHours(0,0,0,0);
@@ -954,7 +1126,7 @@ function compressImage(file,maxDim,quality,cb){
   img.src=url;
 }
 function showModal(){document.getElementById('modalInner').style.maxWidth='';document.getElementById('modal').classList.add('show');document.body.style.overflow='hidden'}
-function closeModal(){if(window.__aiaStopComments)window.__aiaStopComments();window.__cmtCtx=null;document.getElementById('modal').classList.remove('show');document.body.style.overflow=''}
+function closeModal(){if(window.__aiaStopComments)window.__aiaStopComments();if(window.__aiaStopReviews)window.__aiaStopReviews();window.__cmtCtx=null;document.getElementById('modal').classList.remove('show');document.body.style.overflow=''}
 
 /* ===== calendar / upload / lecture ===== */
 function openCalendar(){
@@ -966,15 +1138,152 @@ const MAX_MB=100;
 function checkUpload(inp){const f=inp.files&&inp.files[0];if(!f)return;const mb=f.size/1048576;if(mb>MAX_MB){toast(f.name+' — '+mb.toFixed(0)+'MB는 '+MAX_MB+'MB 제한을 초과해요. 영상은 링크로 올려주세요');inp.value='';return}toast(f.name+' ('+mb.toFixed(1)+'MB) 업로드 준비 완료');inp.value=''}
 function openAddLecture(){document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div class="eyebrow">강의 추가</div><h3 style="margin-top:8px">영상 링크로 강의를 추가합니다</h3><p style="color:var(--muted);font-size:13px;margin-top:6px">대용량 영상 파일을 직접 올리는 대신 유튜브·Vimeo 링크를 붙이면 임베드돼요. 비용 없이 안정적으로 재생됩니다.</p><div class="flabel" style="margin-top:16px">제목</div><input class="finput" placeholder="예: 색소질환 레이저 세팅 총정리" /><div class="flabel">유튜브 · Vimeo 링크</div><input class="finput" placeholder="https://youtu.be/..." /><div class="flabel">발표자료 (선택 · PPT·PDF 100MB 이하)</div><input type="file" class="finput" style="padding:9px" onchange="checkUpload(this)" /><button class="btn btn-primary" style="margin-top:18px;width:100%" onclick="toast(\'강의가 추가되었습니다\');closeModal()">추가</button></div>';showModal()}
 
+/* ===== PARTNERS ===== */
+window.__localIds=window.__localIds||new Set();
+function localId(p){const id=p+Date.now();window.__localIds.add(id);return id;}
+const PARTNER_CATS=['필러','보톡스','레이저','RF·HIFU','실리프팅','스킨부스터','화장품 OEM','의료소모품','의료기기','EMR·CRM','마케팅','인테리어','세무·노무','기타'];
+const PARTNERS=[];
+let partnerCat='전체';
+const VERIFY_MIN=5;
+
+function stars(n){n=Math.round(n||0);let s='';for(let i=1;i<=5;i++)s+=(i<=n?'★':'<span class="off">★</span>');return '<span class="stars">'+s+'</span>';}
+function myUid(){return (window.CURRENT_USER&&window.CURRENT_USER.uid)||null;}
+function isAdminUser(){return !!(window.CURRENT_USER&&window.CURRENT_USER.role==='admin');}
+function canSeePartner(p){return p.status==='approved'||isAdminUser()||p.live===false||(p.by_uid&&p.by_uid===myUid());}
+function endorsedByMe(p){return !!(p.endorsers&&myUid()&&p.endorsers.indexOf(myUid())>-1);}
+
+window.setLivePartners=function(arr){PARTNERS.length=0;arr.forEach(p=>PARTNERS.push(p));INDEX=buildIndex();
+  const b=document.querySelector('[data-nav="partners"] .cnt');const n=PARTNERS.filter(p=>p.status==='approved').length;
+  if(b)b.textContent=String(n);
+  if(!document.getElementById('page-partners').classList.contains('hidden'))renderPartners();};
+
+function renderPartners(){
+  const cats=['전체'].concat(PARTNER_CATS);
+  const cc=document.getElementById('partnerCats');
+  if(cc)cc.innerHTML=cats.map(c=>'<span class="pill '+(c===partnerCat?'on':'')+'" onclick="setPartnerCat(\''+c+'\')">'+c+'</span>').join('');
+  // 운영진 승인 대기 알림
+  const pb=document.getElementById('pendingBar');
+  if(pb){const pend=PARTNERS.filter(p=>p.status==='pending');
+    pb.innerHTML=(isAdminUser()&&pend.length)?'<div class="upbar" style="border-color:rgba(232,131,107,.45)"><div class="upnote"><svg viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="1.8"><path d="M12 9v4M12 17v.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>승인 대기 중인 업체 '+pend.length+'곳이 있습니다. 카드를 열어 검토해 주세요.</div></div>':'';}
+  const list=PARTNERS.filter(canSeePartner)
+    .filter(p=>partnerCat==='전체'||p.cat===partnerCat)
+    .sort((a,b)=>((b.endorsers||[]).length-(a.endorsers||[]).length)||((b.avg||0)-(a.avg||0)));
+  const box=document.getElementById('partnerGrid');if(!box)return;
+  box.innerHTML=list.map((p,i)=>{
+    const en=(p.endorsers||[]).length;
+    const badge=p.status==='pending'?'<span class="pbadge">승인 대기</span>':(en>=VERIFY_MIN?'<span class="vbadge">✓ VERIFIED</span>':'');
+    return '<div class="pcard" style="animation-delay:'+(i*40)+'ms" onclick="openPartner(\''+p.id+'\')">'+
+      '<div class="ph"><div style="flex:1;min-width:0"><div class="pcat">'+esc(p.cat)+'</div><div class="pn">'+esc(p.name)+'</div></div>'+badge+'</div>'+
+      (p.avg?stars(p.avg)+' <span style="font-size:11.5px;color:var(--muted-2)">'+p.avg.toFixed(1)+'</span>':'<span style="font-size:12px;color:var(--muted-2)">후기 없음</span>')+
+      '<div class="pmeta">'+(p.contact?esc(p.contact):'담당자 미등록')+(p.region?' · '+esc(p.region):'')+'</div>'+
+      '<div class="pfoot"><span>추천 <b>'+en+'</b></span><span>후기 '+(p.reviewCount||0)+'</span></div></div>';
+  }).join('')||'<div style="grid-column:1/-1;color:var(--muted);padding:44px 0;text-align:center;line-height:1.7">이 분류에 등록된 업체가 아직 없어요<br><span style="font-size:12.5px;color:var(--muted-2)">직접 거래해 보고 좋았던 곳을 추천해 주세요</span></div>';
+}
+function setPartnerCat(c){partnerCat=c;renderPartners();}
+
+function openPartner(id){const p=PARTNERS.find(x=>x.id===id);if(!p)return;
+  window.__partnerCtx=id;
+  const en=(p.endorsers||[]).length;const mine=endorsedByMe(p);
+  const verified=en>=VERIFY_MIN?'<span class="vbadge">✓ VERIFIED</span>':'';
+  const pending=p.status==='pending'?'<span class="pbadge">승인 대기</span>':'';
+  const kv=(k,v)=>v?'<div class="kv"><div class="k">'+k+'</div><div class="v">'+esc(v)+'</div></div>':'';
+  const admin=(isAdminUser()&&p.status==='pending')?'<div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-primary" style="flex:1" onclick="approvePartner(\''+p.id+'\',true)">승인하기</button><button class="btn btn-danger" onclick="approvePartner(\''+p.id+'\',false)">반려</button></div>':'';
+  const del=((p.by_uid&&p.by_uid===myUid())||isAdminUser())?'<button class="btn btn-danger" style="width:100%;margin-top:8px" onclick="deletePartner(\''+p.id+'\')">삭제</button>':'';
+  const endorseBtn=p.status==='approved'?'<button class="endorse '+(mine?'on':'')+'" onclick="endorsePartner(\''+p.id+'\')"><svg viewBox="0 0 24 24" fill="'+(mine?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.8"><path d="M7 22V11l5-9 1 1v6h6a2 2 0 0 1 2 2.4l-2 8A2 2 0 0 1 17 21H7Z"/></svg>'+(mine?'추천함':'이 업체 추천')+' · '+en+'</button>':'';
+  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button>'+
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span class="eyebrow">'+esc(p.cat)+'</span>'+verified+pending+'</div>'+
+    '<h3>'+esc(p.name)+'</h3>'+
+    '<div style="margin:8px 0 14px">'+(p.avg?stars(p.avg)+' <span style="font-size:12.5px;color:var(--muted)">'+p.avg.toFixed(1)+' · 후기 '+(p.reviewCount||0)+'개</span>':'<span style="font-size:12.5px;color:var(--muted-2)">아직 후기가 없어요</span>')+'</div>'+
+    kv('담당자',p.contact)+kv('연락처',p.phone)+kv('지역',p.region)+kv('취급 브랜드',p.brands)+
+    kv('추천한 회원',p.by_name)+kv('최근 거래',p.lastDeal)+
+    (p.why?'<div class="pnote"><b style="color:var(--lav)">추천 사유</b><br>'+esc(p.why)+'</div>':'')+
+    '<div style="margin-top:16px">'+endorseBtn+'</div>'+admin+del+
+    '<div style="margin-top:20px;border-top:1px solid var(--line-soft);padding-top:14px;font-family:\'Archivo\';font-weight:700;font-size:12px;letter-spacing:.04em;color:var(--coral)">회원 후기</div>'+
+    '<div id="revList"><div style="font-size:12.5px;color:var(--muted-2);padding:8px 0">불러오는 중…</div></div>'+
+    (p.status==='approved'?'<button class="btn btn-ghost" style="width:100%;margin-top:12px" onclick="composeReview(\''+p.id+'\')">후기 남기기</button>':'')+
+    '</div>';
+  showModal();const mi=document.getElementById('modalInner');if(mi)mi.style.maxWidth='520px';
+  if(window.AIA&&window.AIA.on&&window.__aiaWatchReviews&&p.live)setTimeout(()=>window.__aiaWatchReviews(p.id,renderReviews),30);
+  else setTimeout(()=>renderReviews([]),30);
+}
+function renderReviews(arr){
+  const el=document.getElementById('revList');if(!el)return;
+  if(!arr||!arr.length){el.innerHTML='<div style="font-size:12.5px;color:var(--muted-2);padding:8px 0">아직 후기가 없어요. 거래 경험을 나눠주세요.</div>';return;}
+  const me=myUid();
+  el.innerHTML=arr.map(r=>{const can=(r.uid===me||isAdminUser());
+    return '<div class="rev'+(r.caution?' caution':'')+'"><div class="rh">'+(r.caution?'<span style="color:#E86B6B;font-weight:700">주의</span>':stars(r.rating))+'<b>'+esc(r.author)+'</b><span style="color:var(--muted-2)">'+esc(r.ago)+'</span>'+(can?'<span class="cx" style="opacity:1;margin-left:auto;cursor:pointer;color:var(--muted-2);font-size:11px" onclick="delReview(\''+r.id+'\')">삭제</span>':'')+'</div><div class="rt">'+esc(r.text)+'</div></div>';}).join('');
+}
+function composeReview(pid){
+  window.__revStars=5;window.__revPid=pid;
+  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="openPartner(\''+pid+'\')">✕</button><div class="eyebrow">Review</div><h3 style="margin-top:8px">거래 경험 남기기</h3><div class="flabel">평점</div><div class="starpick" id="starPick"></div><div class="flabel">내용</div><textarea class="finput" id="revText" style="min-height:100px;resize:vertical;font-family:inherit" placeholder="응대 · 교육 · AS · 단가 · 배송 등 실제 경험을 적어주세요"></textarea><label style="display:flex;align-items:center;gap:9px;margin-top:14px;font-size:13.5px;cursor:pointer"><input type="checkbox" id="revCaution" style="width:16px;height:16px;accent-color:#E86B6B"> 주의사항으로 표시 (가격 인상 · AS 지연 등)</label><button class="btn btn-primary" style="width:100%;margin-top:18px" onclick="submitReview()">등록</button></div>';
+  drawStarPick();showModal();
+}
+function drawStarPick(){const el=document.getElementById('starPick');if(!el)return;
+  let h='';for(let i=1;i<=5;i++)h+='<span class="'+(i<=window.__revStars?'on':'')+'" onclick="setRevStars('+i+')">★</span>';el.innerHTML=h;}
+function setRevStars(n){window.__revStars=n;drawStarPick();}
+function submitReview(){
+  const t=(document.getElementById('revText').value||'').trim();
+  if(!t){toast('내용을 입력해 주세요');return;}
+  const caution=document.getElementById('revCaution').checked;
+  const pid=window.__revPid;
+  if(window.AIA&&window.AIA.on&&window.__aiaAddReview)window.__aiaAddReview(pid,window.__revStars,t,caution);
+  else toast('로그인 후 사용할 수 있어요');
+  openPartner(pid);toast('후기를 남겼습니다');
+}
+function delReview(rid){if(!confirm('후기를 삭제할까요?'))return;
+  if(window.AIA&&window.AIA.on&&window.__aiaDeleteReview)window.__aiaDeleteReview(window.__partnerCtx,rid);}
+
+function endorsePartner(id){const p=PARTNERS.find(x=>x.id===id);if(!p)return;
+  const uid=myUid();if(!uid){toast('로그인이 필요합니다');return;}
+  p.endorsers=p.endorsers||[];
+  const i=p.endorsers.indexOf(uid);
+  if(i>-1){p.endorsers.splice(i,1);toast('추천을 취소했습니다');}else{p.endorsers.push(uid);toast('추천했습니다');}
+  renderPartners();openPartner(id);
+  if(window.AIA&&window.AIA.on&&window.__aiaEndorse)window.__aiaEndorse(id,i===-1);
+}
+function composePartner(){
+  document.getElementById('modalInner').innerHTML='<div class="modal-body" style="padding-top:26px"><button class="modal-x" style="background:var(--ink-2)" onclick="closeModal()">✕</button><div class="eyebrow">Partners</div><h3 style="margin-top:8px">업체 추천하기</h3><p style="color:var(--muted);font-size:12.5px;margin-top:6px;line-height:1.6">직접 거래해 보신 곳만 올려주세요. 운영진 확인 후 공개됩니다.</p><div class="flabel">업체명</div><input class="finput" id="ptName" placeholder="예: OO메디칼" /><div class="flabel">분류</div><div id="ptCatPick" class="topics"></div><div class="flabel">담당자 (선택)</div><input class="finput" id="ptContact" placeholder="예: 김OO 부장" /><div class="flabel">연락처 (선택)</div><input class="finput" id="ptPhone" placeholder="010-0000-0000" /><div class="flabel">지역 (선택)</div><input class="finput" id="ptRegion" placeholder="예: 서울" /><div class="flabel">취급 브랜드 (선택)</div><input class="finput" id="ptBrands" placeholder="예: BELLAST · Juvederm" /><div class="flabel">최근 거래 시점</div><input class="finput" id="ptLast" placeholder="예: 2026.06" /><div class="flabel">추천 사유</div><textarea class="finput" id="ptWhy" style="min-height:80px;resize:vertical;font-family:inherit" placeholder="응대 · 교육 · AS · 단가 등 추천하는 이유를 적어주세요"></textarea><button class="btn btn-primary" style="width:100%;margin-top:18px" onclick="submitPartner()">등록 요청</button></div>';
+  document.getElementById('ptCatPick').innerHTML=PARTNER_CATS.map((t,i)=>'<span class="pill'+(i===0?' on':'')+'" data-t="'+t+'" onclick="pickNoteTag(this)">'+t+'</span>').join('');
+  showModal();const mi=document.getElementById('modalInner');if(mi)mi.style.maxWidth='520px';
+}
+function submitPartner(){
+  const name=(document.getElementById('ptName').value||'').trim();
+  if(!name){toast('업체명을 입력해 주세요');return;}
+  const last=(document.getElementById('ptLast').value||'').trim();
+  const why=(document.getElementById('ptWhy').value||'').trim();
+  if(!last){toast('최근 거래 시점을 적어주세요');return;}
+  if(!why){toast('추천 사유를 적어주세요');return;}
+  const ce=document.querySelector('#ptCatPick .pill.on');
+  const f={name:name,cat:ce?ce.dataset.t:'기타',contact:(document.getElementById('ptContact').value||'').trim(),
+    phone:(document.getElementById('ptPhone').value||'').trim(),region:(document.getElementById('ptRegion').value||'').trim(),
+    brands:(document.getElementById('ptBrands').value||'').trim(),lastDeal:last,why:why};
+  PARTNERS.unshift(Object.assign({id:localId('lp'),by_uid:myUid(),by_name:(window.CURRENT_USER&&window.CURRENT_USER.name)||'회원',status:'pending',endorsers:[],reviewCount:0,avg:0,live:false},f));
+  INDEX=buildIndex();renderPartners();closeModal();toast('등록 요청을 보냈습니다 · 운영진 확인 후 공개됩니다');
+  if(window.AIA&&window.AIA.on&&window.__aiaAddPartner)window.__aiaAddPartner(f);
+}
+function approvePartner(id,ok){
+  const p=PARTNERS.find(x=>x.id===id);if(!p)return;
+  if(ok&&!p.live&&window.AIA&&window.AIA.on){toast('이 항목은 서버에 저장되지 않았어요 — Firestore 규칙 게시 후 다시 등록해 주세요');return;}
+  if(!ok&&!confirm('이 등록 요청을 반려(삭제)할까요?'))return;
+  if(ok){p.status='approved';renderPartners();openPartner(id);toast('승인했습니다');
+    if(window.AIA&&window.AIA.on&&window.__aiaApprovePartner)window.__aiaApprovePartner(id);}
+  else{const i=PARTNERS.findIndex(x=>x.id===id);if(i>-1)PARTNERS.splice(i,1);renderPartners();closeModal();toast('반려했습니다');
+    if(window.AIA&&window.AIA.on&&window.__aiaDeletePartner)window.__aiaDeletePartner(id);}
+}
+function deletePartner(id){if(!confirm('이 업체 정보를 삭제할까요?'))return;
+  const i=PARTNERS.findIndex(x=>x.id===id);if(i>-1)PARTNERS.splice(i,1);
+  renderPartners();closeModal();toast('삭제했습니다');
+  if(window.AIA&&window.AIA.on&&window.__aiaDeletePartner)window.__aiaDeletePartner(id);}
+
 /* ===== search ===== */
 let INDEX=[];
 function buildIndex(){const idx=[];
   CASES.forEach(c=>idx.push({cat:'증례',t:c.title,s:c.tag+' · '+c.author,c:'#E8836B',ic:'🩹',act:()=>{go('rounds');openCase(c.id)}}));
   NOTES.forEach(n=>idx.push({cat:'노트',t:n.text.slice(0,30)+'…',s:n.tag+' · '+n.author,c:'#C4B3DC',ic:'✎',act:()=>{go('notebook');openNote(n.id)}}));
-  JOURNALS.forEach(j=>idx.push({cat:'논문',t:j.title,s:j.src+' · '+j.year,c:'#86C9A6',ic:'📄',act:()=>{go('library');setLibTab('논문')}}));
-  ACADEMY.forEach(a=>idx.push({cat:'강의',t:a.title,s:a.tag+' · '+a.by,c:'#E0B25E',ic:'🎓',act:()=>{go('library');setLibTab('강의')}}));
-  RES.forEach(r=>idx.push({cat:'자료',t:r.n,s:r.cat+' · '+r.type,c:'#7FA8D9',ic:'📁',act:()=>{go('library');setLibTab('자료')}}));
+  ACADEMY.forEach(a=>idx.push({cat:'강의',t:a.title,s:(a.tag||'')+' · '+(a.by||''),c:'#E0B25E',ic:'🎓',act:()=>{go('library');setLibTab('강의');playLecture(a.id)}}));
+  RES.forEach(r=>idx.push({cat:'자료',t:r.n,s:r.cat+' · '+(r.kind==='link'?'링크':(r.type||'파일')),c:'#7FA8D9',ic:'📁',act:()=>{go('library');setLibTab('자료');openResource(r.id)}}));
   GATHERINGS.forEach((g,i)=>idx.push({cat:'모임',t:g.title,s:g.date+' · '+g.topics,c:'#9C8CD8',ic:'📷',act:()=>{go('sessions');openGather(i)}}));
+  PARTNERS.filter(canSeePartner).forEach(p=>idx.push({cat:'업체',t:p.name,s:p.cat+(p.region?' · '+p.region:''),c:'#86C9A6',ic:'🤝',act:()=>{go('partners');openPartner(p.id)}}));
   MEMBERS.forEach((m,i)=>idx.push({cat:'멤버',t:m.n,s:m.hp,c:'#E89B6B',ic:'👤',act:()=>{go('circle');openMember(i)}}));
   return idx;}
 function runSearch(q){const box=document.getElementById('searchResults');q=q.trim().toLowerCase();
@@ -994,7 +1303,7 @@ function go(id){
   document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.nav===id));
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
   document.getElementById('scrollArea').scrollTop=0;
-  if(!RENDERED[id]){({rounds:renderRounds,notebook:renderNotebook,library:renderLibrary,sessions:renderGatherings,circle:renderMembers}[id]||(()=>{}))();RENDERED[id]=true}
+  if(!RENDERED[id]){({rounds:renderRounds,notebook:renderNotebook,library:renderLibrary,partners:renderPartners,sessions:renderGatherings,circle:renderMembers}[id]||(()=>{}))();RENDERED[id]=true}
   if(id==='explore')setTimeout(()=>document.getElementById('pageSearch').focus(),50);
   toggleNav(false);
 }
@@ -1069,11 +1378,31 @@ if (FIREBASE_ON) {
     const V = "https://www.gstatic.com/firebasejs/11.3.0";
     const { initializeApp } = await import(`${V}/firebase-app.js`);
     const { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } = await import(`${V}/firebase-auth.js`);
-    const { initializeFirestore, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, doc, getDoc, setDoc, updateDoc, deleteDoc, increment } = await import(`${V}/firebase-firestore.js`);
+    const { initializeFirestore, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, doc, getDoc, setDoc, updateDoc, deleteDoc, increment, arrayUnion, arrayRemove, getDocs } = await import(`${V}/firebase-firestore.js`);
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = initializeFirestore(app, { experimentalForceLongPolling: true, useFetchStreams: false });
     window.AIA = { on:true, app, auth, db };
+
+    // Storage (Blaze 전환 시 자동 활성 — 대용량 파일 업로드)
+    let _st=null,_sf=null;
+    try{ const S=await import(`${V}/firebase-storage.js`); _st=S.getStorage(app); _sf=S; window.AIA.storage=true; }
+    catch(e){ window.AIA.storage=false; }
+    window.__aiaHasStorage=()=>!!_st;
+    window.__aiaUploadFile=(file,onProgress,done)=>{
+      if(!_st){ done(null,'no-storage'); return; }
+      const u=auth.currentUser; if(!u){ done(null,'no-auth'); return; }
+      try{
+        const safe=file.name.replace(/[^\w.\-]/g,'_');
+        const r=_sf.ref(_st,'resources/'+Date.now()+'_'+safe);
+        const task=_sf.uploadBytesResumable(r,file);
+        task.on('state_changed',
+          (s)=>{ if(onProgress)onProgress(Math.round(s.bytesTransferred/s.totalBytes*100)); },
+          (e)=>{ console.error('[upload]',e); done(null,e.code||'error'); },
+          async()=>{ try{ const url=await _sf.getDownloadURL(task.snapshot.ref); done(url,null); }
+                     catch(e){ done(null,e.code||'url-error'); } });
+      }catch(e){ console.error('[upload]',e); done(null,e.code||'error'); }
+    };
 
     const PAL = ['#E8836B','#C4B3DC','#86C9A6','#E0B25E','#7FA8D9','#D98AB5','#9C8CD8','#E89B6B'];
     const colorFor = (u)=>{ let h=0; for (const c of (u||'')) h=(h*31+c.charCodeAt(0))>>>0; return PAL[h%PAL.length]; };
@@ -1186,7 +1515,7 @@ if (FIREBASE_ON) {
     };
 
     // 수정·삭제 (로컬 임시 id는 서버 반영 전이므로 건너뜀)
-    const isTemp = (id)=>/^(local|lc|ls)/.test(String(id));
+    const isTemp = (id)=>(window.__localIds&&window.__localIds.has(id))||/^(local|lc|ls|lp|ll|lr|lf)\d{10,}$/.test(String(id));
     window.__aiaUpdateNote = async (id,text,tag)=>{ if(isTemp(id))return; try{ await updateDoc(doc(db,'notes',id),{text,tag}); }catch(e){ console.error(e); toast('수정 실패: '+e.code); } };
     window.__aiaDeleteNote = async (id)=>{ if(isTemp(id))return; try{ await deleteDoc(doc(db,'notes',id)); }catch(e){ console.error(e); toast('삭제 실패: '+e.code); } };
     window.__aiaUpdateCase = async (id,f)=>{ if(isTemp(id))return; try{ await updateDoc(doc(db,'rounds',id),f); }catch(e){ console.error(e); toast('수정 실패: '+e.code); } };
@@ -1221,6 +1550,89 @@ if (FIREBASE_ON) {
       try{ await deleteDoc(doc(db,coll,pid,'comments',cid)); await updateDoc(doc(db,coll,pid),{commentCount:increment(-1)}); }
       catch(e){console.error('[comment del]',e);toast('삭제 실패: '+e.code);}
     };
+
+    // Library — Lectures 실시간
+    let lecStarted=false;
+    const startLectures=()=>{ if(lecStarted)return; lecStarted=true;
+      const qy=query(collection(db,'lectures'), orderBy('createdAt','desc'));
+      onSnapshot(qy,(snap)=>{const arr=[];snap.forEach(d=>{const a=d.data({serverTimestamps:'estimate'});
+        arr.push({id:d.id,uid:a.authorUid,live:true,title:a.title||'',url:a.url||'',tag:a.tag||'',desc:a.desc||'',by:a.authorName||'회원',ago:timeAgo(a.createdAt)});});
+        if(window.setLiveLectures)window.setLiveLectures(arr);},(e)=>console.warn('[lectures]',e));
+    };
+    window.__aiaAddLecture=async(f)=>{const u=auth.currentUser;if(!u)return;
+      try{ await addDoc(collection(db,'lectures'),{title:f.title,url:f.url,tag:f.tag,desc:f.desc,authorUid:u.uid,authorName:(u.displayName||u.email.split('@')[0]),createdAt:serverTimestamp()}); }
+      catch(e){console.error('[lecture add]',e);toast('강의 저장 실패: '+e.code);}};
+    window.__aiaUpdateLecture=async(id,f)=>{if(isTemp(id))return;try{ await updateDoc(doc(db,'lectures',id),f);}catch(e){console.error(e);toast('수정 실패: '+e.code);}};
+    window.__aiaDeleteLecture=async(id)=>{if(isTemp(id))return;try{ await deleteDoc(doc(db,'lectures',id));}catch(e){console.error(e);toast('삭제 실패: '+e.code);}};
+
+    // Library — Resources 실시간
+    let resStarted=false;
+    const RESC={'논문':'#E8836B','동의서':'#7FA8D9','차팅':'#86C9A6','발표자료':'#E0B25E','기타':'#C4B3DC'};
+    const startResources=()=>{ if(resStarted)return; resStarted=true;
+      const qy=query(collection(db,'resources'), orderBy('createdAt','desc'));
+      onSnapshot(qy,(snap)=>{const arr=[];snap.forEach(d=>{const r=d.data({serverTimestamps:'estimate'});
+        arr.push({id:d.id,uid:r.authorUid,live:true,kind:r.kind||'file',n:r.n||'',cat:r.cat||'기타',url:r.url||'',data:r.data||'',type:r.type||'',size:r.size||'',by:r.authorName||'회원',ago:timeAgo(r.createdAt),c:RESC[r.cat||'기타']});});
+        if(window.setLiveResources)window.setLiveResources(arr);},(e)=>console.warn('[resources]',e));
+    };
+    window.__aiaAddResource=async(f)=>{const u=auth.currentUser;if(!u)return;
+      try{ await addDoc(collection(db,'resources'),Object.assign({},f,{authorUid:u.uid,authorName:(u.displayName||u.email.split('@')[0]),createdAt:serverTimestamp()})); }
+      catch(e){console.error('[resource add]',e);toast(e.code==='resource-exhausted'?'파일이 커요 — 드라이브 링크로 올려주세요':'자료 저장 실패: '+e.code);}};
+    window.__aiaDeleteResource=async(id)=>{if(isTemp(id))return;try{ await deleteDoc(doc(db,'resources',id));}catch(e){console.error(e);toast('삭제 실패: '+e.code);}};
+
+    // Partners — 업체 네트워크
+    let ptStarted=false;
+    const startPartners=()=>{ if(ptStarted)return; ptStarted=true;
+      const qy=query(collection(db,'partners'), orderBy('createdAt','desc'));
+      onSnapshot(qy,(snap)=>{const arr=[];snap.forEach(d=>{const p=d.data({serverTimestamps:'estimate'});
+        arr.push({id:d.id,live:true,name:p.name||'',cat:p.cat||'기타',contact:p.contact||'',phone:p.phone||'',
+          region:p.region||'',brands:p.brands||'',lastDeal:p.lastDeal||'',why:p.why||'',
+          by_uid:p.authorUid,by_name:p.authorName||'회원',status:p.status||'pending',
+          endorsers:Array.isArray(p.endorsers)?p.endorsers:[],reviewCount:p.reviewCount||0,avg:p.avgRating||0,
+          ago:timeAgo(p.createdAt)});});
+        if(window.setLivePartners)window.setLivePartners(arr);},(e)=>{console.warn('[partners]',e);
+          if(e.code==='permission-denied')toast('Partners를 불러올 수 없습니다 — Firestore 규칙 게시가 필요해요');});
+    };
+    window.__aiaAddPartner=async(f)=>{const u=auth.currentUser;if(!u)return;
+      try{ await addDoc(collection(db,'partners'),Object.assign({},f,{authorUid:u.uid,authorName:(u.displayName||u.email.split('@')[0]),
+        status:'pending',endorsers:[],reviewCount:0,avgRating:0,createdAt:serverTimestamp()})); }
+      catch(e){console.error('[partner add]',e);
+        toast(e.code==='permission-denied'?'저장 권한이 없습니다 — Firestore 규칙에 partners를 추가해 주세요':'등록 실패: '+(e.code||e.message));}};
+    window.__aiaApprovePartner=async(id)=>{if(isTemp(id))return;
+      try{ await updateDoc(doc(db,'partners',id),{status:'approved'}); }
+      catch(e){console.error('[approve]',e);
+        toast(e.code==='permission-denied'?'승인 권한이 없습니다 — 운영진 권한 확인이 필요해요':
+              e.code==='not-found'?'서버에 없는 항목입니다 — 다시 등록해 주세요':'승인 실패: '+(e.code||e.message));}};
+    window.__aiaDeletePartner=async(id)=>{if(isTemp(id))return;
+      try{ await deleteDoc(doc(db,'partners',id)); }catch(e){console.error(e);toast('삭제 실패: '+e.code);}};
+    window.__aiaEndorse=async(id,add)=>{const u=auth.currentUser;if(!u||isTemp(id))return;
+      try{ await updateDoc(doc(db,'partners',id),{endorsers: add?arrayUnion(u.uid):arrayRemove(u.uid)}); }
+      catch(e){console.error('[endorse]',e);toast('추천 실패: '+e.code);}};
+
+    // Partners — 후기
+    let revUnsub=null;
+    window.__aiaWatchReviews=(pid,cb)=>{
+      if(revUnsub){revUnsub();revUnsub=null;}
+      if(!pid||isTemp(pid)){cb(null);return;}
+      const qy=query(collection(db,'partners',pid,'reviews'), orderBy('createdAt','desc'));
+      revUnsub=onSnapshot(qy,(snap)=>{const arr=[];snap.forEach(d=>{const r=d.data({serverTimestamps:'estimate'});
+        arr.push({id:d.id,uid:r.authorUid,author:r.authorName||'회원',rating:r.rating||0,text:r.text||'',caution:!!r.caution,ago:timeAgo(r.createdAt)});});
+        cb(arr);},(e)=>console.warn('[reviews]',e));
+    };
+    window.__aiaStopReviews=()=>{ if(revUnsub){revUnsub();revUnsub=null;} };
+    const recalcPartner=async(pid)=>{
+      try{ const snap=await getDocs(collection(db,'partners',pid,'reviews'));
+        let n=0,sum=0;snap.forEach(d=>{const r=d.data();if(!r.caution){n++;sum+=(r.rating||0);}});
+        await updateDoc(doc(db,'partners',pid),{reviewCount:snap.size,avgRating:n?Math.round((sum/n)*10)/10:0});
+      }catch(e){console.warn('[recalc]',e);}
+    };
+    window.__aiaAddReview=async(pid,rating,text,caution)=>{const u=auth.currentUser;if(!u||isTemp(pid))return;
+      try{ await addDoc(collection(db,'partners',pid,'reviews'),{rating:rating,text:text,caution:!!caution,
+        authorUid:u.uid,authorName:(u.displayName||u.email.split('@')[0]),createdAt:serverTimestamp()});
+        await recalcPartner(pid);
+      }catch(e){console.error('[review add]',e);toast('후기 등록 실패: '+e.code);}};
+    window.__aiaDeleteReview=async(pid,rid)=>{if(isTemp(pid))return;
+      try{ await deleteDoc(doc(db,'partners',pid,'reviews',rid)); await recalcPartner(pid); }
+      catch(e){console.error(e);toast('삭제 실패: '+e.code);}};
 
     // 프로필: members/{uid} 로드 → 화면 반영
     const loadProfile = async (user)=>{
@@ -1272,6 +1684,9 @@ if (FIREBASE_ON) {
         startCases();
         startSessions();
         startMembers();
+        startLectures();
+        startResources();
+        startPartners();
       } else {
         window.CURRENT_USER = null;
         document.getElementById('login').classList.remove('gone');
